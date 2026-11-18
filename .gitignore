@@ -1,0 +1,32 @@
+# Ignore compiled python
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# Ignore PyInstaller build artifacts
+build/
+dist/
+audits/
+
+# Ignore application backups, snapshots, and local database
+backups/
+backups/snapshots/
+kpop_ratings.db
+kpop_ratings.db-wal
+kpop_ratings.db-shm
+
+# Ignore system-specific clutter & IDE files
+.DS_Store
+Thumbs.db
+.vscode/
+*.code-workspace
+
+# Ignore local agent instructions, code review, dev notes, and env/log files
+GEMINI.md
+BACKLOG.md
+CODE_REVIEW.md
+notes to self.txt
+.env
+.env.*
+*.log
