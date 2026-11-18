@@ -1,6 +1,6 @@
 # K-Pop Discography & Analytics Tracker
 
-A local FastAPI + SQLite web application (**K-Pop DAT**) for cataloging K-Pop discographies, rating individual tracks (`1.0–5.0★`), and analyzing career trajectories across groups and soloists. Integrates optionally with the companion **[SonicTaste (STC)](../MTC%20App/README.md)** audio ML sidecar for Watchlist taste predictions.
+A local FastAPI + SQLite web application (**K-Pop DAT**) for cataloging K-Pop discographies, rating individual tracks (`1.0–5.0★`), and analyzing career trajectories across groups and soloists. Integrates optionally with the companion **[SonicTaste Classifier (STC)](https://github.com/mth309/kpop-ml-sonictaste)** audio ML sidecar for Watchlist taste predictions.
 
 > **New here?** See the **[New User Workflow Guide](WORKFLOW.md)** for the recommended step-by-step order from your first import to SonicTaste predictions.
 
