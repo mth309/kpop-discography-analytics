@@ -6,6 +6,13 @@ A local FastAPI + SQLite web application (**K-Pop DAT**) for cataloging K-Pop di
 
 ---
 
+<p align="center">
+  <img src="docs/deep-dive.png" width="49%" alt="Artist Deep Dive" />
+  <img src="docs/all-dashboard.png" width="49%" alt="Tier List" />
+</p>
+
+---
+
 ## Key Features
 
 * **MusicBrainz Ingestion (Single & Bulk):** Fetch official releases and tracklists from MusicBrainz, auto-categorize tracks under a 5-tier model (`core`, `solo`, `unit`, `alt_lang`, `non_canon`), and auto-fill `is_title_track` and prior `rating` values when tracks reappear on EPs/LPs.
