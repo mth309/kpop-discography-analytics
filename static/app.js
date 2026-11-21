@@ -896,6 +896,27 @@ async function triggerCatalogRestore() {
   }
 }
 
+async function checkStcAvailability() {
+  const card = document.getElementById("stc-sync-card");
+  const btn = document.getElementById("stc-sync-btn");
+  const badge = document.getElementById("stc-offline-badge");
+  if (!card || !btn) return;
+  try {
+    const res = await fetch("/api/stc/health");
+    const data = await res.json();
+    const available = Boolean(data.available);
+    card.classList.toggle("opacity-50", !available);
+    btn.disabled = !available;
+    btn.classList.toggle("cursor-not-allowed", !available);
+    btn.classList.toggle("bg-slate-700", !available);
+    btn.classList.toggle("bg-indigo-600", available);
+    btn.classList.toggle("hover:bg-indigo-500", available);
+    if (badge) badge.classList.toggle("hidden", available);
+  } catch (_) {
+    // Leave default state if health probe fails
+  }
+}
+
 async function syncStcEmbeddings() {
   const btn = document.getElementById("stc-sync-btn");
   const statusDiv = document.getElementById("stc-sync-status");
@@ -1107,13 +1128,13 @@ function renderLibraryArtistsTable(items) {
         <td class="py-2.5 px-2">${statusBadge}</td>
         <td class="py-2.5 px-2 text-center">
           <button type="button" onclick="filterAlbumsByArtist('${escapeJsArg(a.name)}')"
-                  class="px-2 py-0.5 rounded bg-slate-900 hover:bg-slate-800 text-indigo-300 font-medium transition">
+                  class="whitespace-nowrap px-2 py-0.5 rounded bg-slate-900 hover:bg-slate-800 text-indigo-300 font-medium transition">
             ${a.album_count} albums ➔
           </button>
         </td>
         <td class="py-2.5 px-2 text-center">
           <button type="button" onclick="filterTracksByArtist('${escapeJsArg(a.name)}')"
-                  class="text-slate-400 hover:text-slate-200 bg-slate-900 px-2 py-0.5 rounded border border-slate-800 transition">
+                  class="whitespace-nowrap text-slate-400 hover:text-slate-200 bg-slate-900 px-2 py-0.5 rounded border border-slate-800 transition">
             ${a.track_count} tracks ➔
           </button>
         </td>
@@ -1755,7 +1776,7 @@ function renderFilteredAlbums() {
         <td class="py-2.5 px-3 font-mono text-slate-500">${item.release_date || 'No Date'}</td>
         <td class="py-2.5 px-2 text-center">
           <button type="button" onclick="filterTracksByAlbum('${escapeJsArg(item.album_title)}', '${escapeJsArg(item.artist)}')"
-                  class="text-slate-400 hover:text-slate-200 bg-slate-900 px-2 py-0.5 rounded border border-slate-800 transition">
+                  class="whitespace-nowrap text-slate-400 hover:text-slate-200 bg-slate-900 px-2 py-0.5 rounded border border-slate-800 transition">
             ${item.track_count} tracks ➔
           </button>
         </td>
@@ -2200,7 +2221,7 @@ async function renderAnalytics() {
             <div class="flex-1 bg-slate-900 rounded-full h-2 overflow-hidden border border-slate-800/80">
               <div class="${conf.bar} h-full rounded-full transition-all duration-300" style="width: ${row.pct}%"></div>
             </div>
-            <div class="w-16 font-mono text-[11px] text-slate-400 text-right">
+            <div class="w-20 shrink-0 font-mono text-[11px] text-slate-400 text-right whitespace-nowrap">
               <span class="font-semibold text-slate-200">${row.count}</span>
               <span class="text-slate-600">(${row.pct}%)</span>
             </div>
@@ -4544,3 +4565,4 @@ loadTracksData();
 initSearchKeyListeners();
 initAlbumDateFilterLabels();
 loadWatchlist();
+checkStcAvailability();

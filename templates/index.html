@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>K-Pop DAT</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎵</text></svg>">
   <script src="/static/tailwindcss.js"></script>
@@ -60,12 +61,12 @@
 
       <!-- SUB-PANE A: SINGLE ARTIST -->
       <section id="analytics-pane-single" class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-lg space-y-6">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+        <div class="flex flex-col min-[736px]:flex-row min-[736px]:items-center justify-between gap-4 border-b border-slate-800 pb-4">
           <div>
             <h2 class="text-lg font-semibold text-slate-200">Metrics & Analytics</h2>
             <p class="text-slate-400 text-xs mt-0.5">Career evaluation, chronological trends and standout releases</p>
           </div>
-          <div class="flex items-center gap-3">
+          <div class="flex flex-wrap items-center gap-3">
             <label class="text-xs font-semibold text-slate-400 uppercase">Artist:</label>
             <div class="relative flex items-center" id="single-artist-combobox-container">
               <input id="analytics-artist-input" type="text" placeholder="Search artist..."
@@ -88,12 +89,12 @@
                    class="hidden absolute top-full left-0 mt-1 w-full min-w-[220px] max-h-64 overflow-y-auto bg-slate-950 border border-slate-700 rounded-md shadow-2xl z-50 py-1 divide-y divide-slate-800/40">
               </div>
             </div>
-            <div id="analytics-artist-badges" class="flex items-center gap-1.5"></div>
+            <div id="analytics-artist-badges" class="flex flex-wrap items-center gap-1.5"></div>
           </div>
         </div>
 
         <!-- Metric Cards Strip -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <!-- 1. Q-WAR Sabermetrics (Compacted Q-WAR & Q-WAR / Track) -->
           <div class="bg-slate-950 p-4 rounded-lg border border-slate-800 space-y-2 flex flex-col justify-between">
             <span class="text-xs text-slate-200 uppercase tracking-wider font-semibold">Q-WAR Metrics</span>
@@ -296,7 +297,7 @@
                 <span id="title-bside-summary" class="text-[11px] text-slate-500 font-mono">-- titles / -- b-sides</span>
               </div>
               
-              <div class="grid grid-cols-2 gap-3 text-xs">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                 <!-- Titles Box -->
                 <div onclick="filterTracksByArtist(currentSingleArtist, { trackType: 'title_only' })"
                      title="View Title Tracks in Library Explorer"
@@ -307,7 +308,7 @@
                   </div>
                   <div class="flex items-baseline justify-between pt-1">
                     <span class="text-[11px] text-slate-400">Score / Hit:</span>
-                    <div class="flex items-baseline gap-1">
+                    <div class="flex items-baseline gap-1 whitespace-nowrap">
                       <span id="stat-title-avg" class="font-black text-amber-400 text-sm">--</span>
                       <span class="text-slate-600 text-[10px]">/</span>
                       <span id="stat-title-hit" class="font-semibold text-emerald-400 text-xs">--%</span>
@@ -329,7 +330,7 @@
                   </div>
                   <div class="flex items-baseline justify-between pt-1">
                     <span class="text-[11px] text-slate-400">Score / Hit:</span>
-                    <div class="flex items-baseline gap-1">
+                    <div class="flex items-baseline gap-1 whitespace-nowrap">
                       <span id="stat-bside-avg" class="font-black text-amber-400 text-sm">--</span>
                       <span class="text-slate-600 text-[10px]">/</span>
                       <span id="stat-bside-hit" class="font-semibold text-emerald-400 text-xs">--%</span>
@@ -650,7 +651,7 @@
 
           <!-- Top Pagination Controls for Groups -->
           <div class="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400">
-            <div class="flex items-center gap-3">
+            <div class="flex flex-wrap items-center gap-3">
               <div class="flex items-center gap-1.5">
                 <span>Show</span>
                 <select onchange="changeAllArtistsPageSize(this.value)" 
@@ -747,7 +748,7 @@
 
           <!-- Top Pagination Controls for Soloists -->
           <div class="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400">
-            <div class="flex items-center gap-3">
+            <div class="flex flex-wrap items-center gap-3">
               <div class="flex items-center gap-1.5">
                 <span>Show</span>
                 <select onchange="changeAllArtistsPageSize(this.value)" 
@@ -815,7 +816,7 @@
 
         <!-- Dedicated Pagination Controls Bar for Main Tables -->
         <div id="all-artists-pagination-bar" class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 border-t border-slate-800 text-xs text-slate-400">
-          <div class="flex items-center gap-3">
+          <div class="flex flex-wrap items-center gap-3">
             <div class="flex items-center gap-1.5">
               <span>Show</span>
               <select id="all-artists-page-size" onchange="changeAllArtistsPageSize(this.value)" 
@@ -874,7 +875,7 @@
         <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 w-full max-w-4xl shadow-2xl max-h-[92vh] flex flex-col">
           <!-- Modal Header -->
           <div class="flex justify-between items-center border-b border-slate-800 pb-3 shrink-0">
-            <div class="flex items-center gap-3">
+            <div class="flex flex-wrap items-center gap-3">
               <h2 id="staging-title" class="text-lg font-semibold text-slate-200">Edit Album & Track Ratings</h2>
               <span id="staging-badge" class="text-xs bg-amber-950 text-amber-400 border border-amber-800 px-2.5 py-0.5 rounded-full font-mono">Editing</span>
             </div>
@@ -913,7 +914,7 @@
             <!-- Tracks Table -->
             <div>
               <div class="flex justify-between items-center mb-2">
-                <div class="flex items-center gap-3">
+                <div class="flex flex-wrap items-center gap-3">
                   <span class="text-sm font-semibold text-slate-300">Tracks</span>
                   <button type="button" onclick="addNewTrackRow()" 
                           class="text-xs bg-indigo-950 hover:bg-indigo-900 border border-indigo-800 text-indigo-300 px-2.5 py-0.5 rounded transition flex items-center gap-1">
@@ -1142,7 +1143,7 @@
         <!-- Top Pagination Controls Bar -->
         <div id="library-pagination-top-bar" class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-1 text-xs text-slate-400">
           <!-- Left: Page Size Selector & Record Summary -->
-          <div class="flex items-center gap-3">
+          <div class="flex flex-wrap items-center gap-3">
             <div class="flex items-center gap-1.5">
               <span>Show</span>
               <select onchange="changePageSize(this.value)" 
@@ -1227,7 +1228,7 @@
         <!-- Pagination Controls Bar -->
         <div id="library-pagination-bar" class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 border-t border-slate-800 text-xs text-slate-400">
           <!-- Left: Page Size Selector & Record Summary -->
-          <div class="flex items-center gap-3">
+          <div class="flex flex-wrap items-center gap-3">
             <div class="flex items-center gap-1.5">
               <span>Show</span>
               <select id="lib-page-size" onchange="changePageSize(this.value)" 
@@ -1408,11 +1409,12 @@
         </div>
 
         <!-- Card 2: Sync Taste Model Embeddings (SonicTaste / STC) -->
-        <section class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-lg space-y-4">
+        <section id="stc-sync-card" class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-lg space-y-4 transition-opacity">
           <div class="border-b border-slate-800 pb-3">
             <h2 class="text-lg font-semibold text-slate-200 flex items-center gap-2">
               <span class="text-indigo-400">🧠</span>
               <span>Sync Prediction Model Embeddings</span>
+              <span id="stc-offline-badge" class="hidden ml-auto text-[11px] font-medium px-2 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700">Sidecar Offline</span>
             </h2>
             <p class="text-xs text-slate-400 mt-0.5">Fetches 30s audio previews for newly imported tracks, extracts MERT acoustic &amp; hook-contrast vectors, and refreshes the Watchlist prediction model.</p>
           </div>

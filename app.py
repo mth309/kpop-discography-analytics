@@ -830,6 +830,16 @@ def api_predict_watchlist_artist(watchlist_id: int, top_n: int = Query(default=1
     }
 
 
+@app.get("/api/stc/health")
+def api_stc_health():
+    """Returns whether the local SonicTaste (STC) sidecar is reachable."""
+    try:
+        _call_stc_sidecar("/health", timeout=2, method="GET")
+        return {"available": True}
+    except HTTPException:
+        return {"available": False}
+
+
 @app.post("/api/stc/sync")
 def api_sync_stc_embeddings():
     """Starts incremental SonicTaste (STC) embedding & checkpoint refresh in the sidecar background."""
