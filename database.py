@@ -60,7 +60,7 @@ def get_connection() -> sqlite3.Connection:
     conn.execute("PRAGMA foreign_keys = ON;")
     conn.create_function("is_alt_lang", 1, is_alt_lang_text, deterministic=True)
     conn.create_function("release_day_gap", 2, release_day_gap, deterministic=True)
-    conn.create_function("py_lower", 1, lambda s: s.casefold() if isinstance(s, str) else s, deterministic=True)
+    conn.create_function("py_lower", 1, lambda s: s.replace("\u2019", "'").replace("\u2018", "'").casefold() if isinstance(s, str) else s, deterministic=True)
     return conn
 
 
@@ -1493,7 +1493,7 @@ CANONICAL_UNIQUE_TRACK_SQL = """
         JOIN albums a2 ON t2.album_id = a2.id
         WHERE a2.artist_id = al.artist_id
           AND a2.id != al.id
-          AND LOWER(TRIM(t2.title)) = LOWER(TRIM(tr.title))
+          AND REPLACE(REPLACE(LOWER(TRIM(t2.title)), '’', ''''), '‘', '''') = REPLACE(REPLACE(LOWER(TRIM(tr.title)), '’', ''''), '‘', '''')
           AND COALESCE(t2.track_type, 'core') = COALESCE(tr.track_type, 'core')
           AND (
               -- Priority 1: A rated copy always shadows an unrated copy

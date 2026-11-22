@@ -116,6 +116,35 @@ class TestCoreInvariants(unittest.TestCase):
                 conn.execute("DELETE FROM artists WHERE name LIKE '__Test%'")
                 conn.commit()
 
+    def test_canonical_deduplication_curly_vs_straight_apostrophe(self):
+        """Tracks differing only by curly (’) vs straight (') apostrophe must deduplicate as one canonical track."""
+        database.init_db()
+        with database.get_connection() as conn:
+            cur = conn.cursor()
+            cur.execute("DELETE FROM artists WHERE name LIKE '__TestQuote%'")
+            cur.execute("INSERT INTO artists (name, artist_type) VALUES ('__TestQuoteArtist__', 'group')")
+            artist_id = cur.lastrowid
+
+            cur.execute("INSERT INTO albums (artist_id, title, release_date, album_type) VALUES (?, 'Single 1', '2024-01-01', 'Single')", (artist_id,))
+            s_id = cur.lastrowid
+            cur.execute("INSERT INTO albums (artist_id, title, release_date, album_type) VALUES (?, 'EP 1', '2024-02-01', 'EP')", (artist_id,))
+            ep_id = cur.lastrowid
+
+            cur.execute("INSERT INTO tracks (album_id, track_number, title, rating, track_type) VALUES (?, 1, ?, 2.0, 'core')", (s_id, "Don\u2019t be happy"))
+            cur.execute("INSERT INTO tracks (album_id, track_number, title, rating, track_type) VALUES (?, 1, ?, 2.0, 'core')", (ep_id, "Don't Be Happy"))
+            conn.commit()
+
+        try:
+            metrics = database.get_artist_summary_metrics("__TestQuoteArtist__")
+            self.assertEqual(metrics["total_rated_tracks"], 1)
+            _, ratings_map = database.get_existing_track_defaults("__TestQuoteArtist__")
+            self.assertIn("don't be happy", ratings_map)
+            self.assertEqual(fetcher.normalize_title_quotes("Don\u2019t be happy"), "Don't be happy")
+        finally:
+            with database.get_connection() as conn:
+                conn.execute("DELETE FROM artists WHERE name LIKE '__TestQuote%'")
+                conn.commit()
+
     def test_canonical_deduplication_rated_priority_and_localized_b_sides(self):
         """Bug 3.3 Regression: Rated tracks must never be shadowed by unrated duplicates,
         and unique original B-sides on localized albums (e.g. Queen of Hearts) must be preserved.

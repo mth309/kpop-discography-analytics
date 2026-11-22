@@ -98,6 +98,13 @@ def _make_request(url: str, params: Optional[Dict[str, Any]] = None, max_retries
     raise RuntimeError("MusicBrainz service unavailable after retries.")
 
 
+def normalize_title_quotes(text: Optional[str]) -> str:
+    """Normalizes typographic single quotes/apostrophes to straight ASCII apostrophes."""
+    if not text:
+        return ""
+    return re.sub(r"[\u2018\u2019]", "'", text).strip()
+
+
 def detect_track_type(title: str) -> str:
     """Infers the track type from its title using keyword and edition heuristics.
 
@@ -273,7 +280,7 @@ def search_release(artist: str, album: str) -> Optional[Dict[str, Any]]:
         
     return {
         "mbid": best["id"],
-        "title": best.get("title"),
+        "title": normalize_title_quotes(best.get("title")),
         "artist": best.get("artist-credit", [{}])[0].get("name", artist),
         "date": best.get("date", ""),
         "country": best.get("country", ""),
@@ -311,7 +318,7 @@ def get_album_tracklist(mbid: str, fallback_artist: Optional[str] = None, rg_id:
     if primary_type == "Album":
         primary_type = "LP"
 
-    album_title = data.get("title", "")
+    album_title = normalize_title_quotes(data.get("title", ""))
     artist_credits = data.get("artist-credit", [])
     artist_name = artist_credits[0].get("name") if artist_credits else fallback_artist
 
@@ -325,7 +332,7 @@ def get_album_tracklist(mbid: str, fallback_artist: Optional[str] = None, rg_id:
 
     for media in selected_media:
         for track in media.get("tracks", []):
-            t_title = track.get("title", "").strip()
+            t_title = normalize_title_quotes(track.get("title", ""))
             if not t_title or t_title.lower() in seen_titles:
                 continue
             seen_titles.add(t_title.lower())
